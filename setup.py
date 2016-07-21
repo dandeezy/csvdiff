@@ -19,12 +19,12 @@ history = open('HISTORY.rst').read().replace('.. :changelog:', '')
 
 setup(
     name='csvdiff',
-    version='0.3.1',
+    version='0.4.1',
     description='Generate a diff between two CSV files.',
     long_description=readme + '\n\n' + history,
-    author='Lars Yencken',
-    author_email='lars@yencken.org',
-    url='https://github.com/larsyencken/csvdiff',
+    author='Dan Murad',
+    author_email='github@danamurad.com',
+    url='https://github.com/dandeezy/epgdiff',
     packages=[
         'csvdiff',
     ],

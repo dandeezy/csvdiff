@@ -1,6 +1,6 @@
-id,name,amount
-1,bob,20
-2,eva,63
-3,sarah,7
-4,jeff,19
-6,fred,10
+id,name,amount,ignored
+1,bob,20,this
+2,eva,63,column
+3,sarah,7,should
+4,jeff,19,be
+6,fred,10,ignored

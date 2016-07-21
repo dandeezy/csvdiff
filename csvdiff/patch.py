@@ -78,7 +78,7 @@ SCHEMA = {
 
 
 def is_empty(diff):
-    "Are there any actual differences encoded in the delta?"
+    """Are there any actual differences encoded in the delta?"""
     return not any([diff['added'], diff['changed'], diff['removed']])
 
 
@@ -187,22 +187,26 @@ def load(istream, strict=True):
     return diff
 
 
-def save(diff, stream=sys.stdout, compact=False):
+def save(diff, stream='default', compact=False):
     "Serialize a patch object."
     flags = {'sort_keys': True}
     if not compact:
         flags['indent'] = 2
+        
+    if stream is 'default': 
+        stream = sys.stdout
+        flags['ensure_ascii']=False
 
     json.dump(diff, stream, **flags)
 
 
-def create(from_records, to_records, index_columns):
+def create(from_records, to_records, index_columns, ignore_columns=[]):
     """
     Diff two sets of records, using the index columns as the primary key for
     both datasets.
     """
-    from_indexed = records.index(from_records, index_columns)
-    to_indexed = records.index(to_records, index_columns)
+    from_indexed = records.index(from_records, index_columns, ignore_columns)
+    to_indexed = records.index(to_records, index_columns, ignore_columns) 
 
     return create_indexed(from_indexed, to_indexed, index_columns)
 
@@ -213,7 +217,6 @@ def create_indexed(from_indexed, to_indexed, index_columns):
 
     # check for changed rows
     changed = _compare_rows(from_indexed, to_indexed, shared)
-
     diff = _assemble(removed, added, changed, from_indexed, to_indexed,
                      index_columns)
 
@@ -257,8 +260,8 @@ def record_diff(lhs, rhs):
     "Diff an individual row."
     delta = {}
     for k in set(lhs).union(rhs):
-        from_ = lhs[k]
-        to_ = rhs[k]
+        from_ = lhs.get(k)
+        to_ = rhs.get(k)
         if from_ != to_:
             delta[k] = {'from': from_, 'to': to_}
 

@@ -35,11 +35,11 @@ def _safe_iterator(reader):
         yield r
 
 
-def index(record_seq, index_columns):
+def index(record_seq, index_columns, ignore_columns=[]):
     try:
         return {
-            tuple(r[i] for i in index_columns): r
-            for r in record_seq
+            tuple(r[i] for i in index_columns): _clean(r, ignore_columns)
+            for r in record_seq 
         }
     except KeyError as k:
         raise InvalidKeyError('invalid column name {k} as key'.format(k=k))
@@ -55,6 +55,12 @@ def save(record_seq, fieldnames, ostream):
 def sort(recs):
     return sorted(recs, key=_record_key)
 
-
+    
+def _clean(record, ignore_columns): 
+    pop_cols = list(set(ignore_columns).intersection(set(record.keys())))
+    [record.pop(k or None) for k in pop_cols]
+    return record
+    
+    
 def _record_key(r):
     return sorted(r.items())
