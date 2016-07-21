@@ -32,12 +32,12 @@ Examples
 
 For example, suppose we have ``a.csv``::
 
-    id,name,amount
-    1,bob,20
-    2,eva,63
-    3,sarah,7
-    4,jeff,19
-    6,fred,10
+    id,name,amount,extra
+    1,bob,20,this
+    2,eva,63,col
+    3,sarah,7,should
+    4,jeff,19,be
+    6,fred,10,ignored
 
 After some changes and corrections to the data, we now have ``b.csv``::
 
@@ -48,16 +48,16 @@ After some changes and corrections to the data, we now have ``b.csv``::
     5,mira,81      <--- added
     6,fred,13      <--- changed
 
-Now we can ask for a summary of differences::
+Now we can ask for a summary of differences but do not parse the extra column (use --ignore to not index this column at all)::
 
-    $ csvdiff --style=summary id a.csv b.csv
+    $ csvdiff --style=summary id a.csv b.csv --ignore=extra
     1 rows removed (20.0%)
     1 rows added (20.0%)
     2 rows changed (40.0%)
 
 Or look at the full diff pretty printed, to make it more readable::
 
-    $ csvdiff --style=pretty --output=diff.json id a.csv b.csv
+    $ csvdiff --style=pretty --output=diff.json id a.csv b.csv --ignore=extra
     $ cat diff.json
     {
       "_index": [
@@ -115,7 +115,7 @@ Diffs generated this way contain all the data that's changed, and can be reappli
 
 We can reapply our changes with the ``csvpatch`` command::
 
-    $ csvpatch --input=diff.json --output=b-plus.csv a-plus.csv
+    $ csvpatch --input=diff.json --output=b-plus.csv a-plus.csv --ignore=extra
     $ cat b-plus.csv
     id,name,amount
     1,bob,23
