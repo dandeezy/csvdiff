@@ -138,7 +138,7 @@ class TestCsvdiff(unittest.TestCase):
         assert result.exit_code != 0
 
     def test_diff_command_valid_usage_with_difference(self):
-        result = self.csvdiff_cmd('id', self.a_file, self.b_file)
+        result = self.csvdiff_cmd('id', self.a_file, self.b_file, '--ignore', 'extra')
         self.assertEqual(result.exit_code, 1)
         diff = result.diff
         patch.validate(diff)
@@ -160,7 +160,7 @@ class TestCsvdiff(unittest.TestCase):
 
     def test_diff_command_valid_usage_with_separator(self):
         result = self.csvdiff_cmd('--sep', '\t', 'id',
-                                  self.a_file_tsv, self.b_file_tsv)
+                                  self.a_file_tsv, self.b_file_tsv, '--ignore', 'extra')
         self.assertEqual(result.exit_code, 1)
         diff = result.diff
         patch.validate(diff)

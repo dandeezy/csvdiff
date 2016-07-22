@@ -1,4 +1,4 @@
-id,name,amount,ignored
+id,name,amount,extra
 1,bob,20,this
 2,eva,63,column
 3,sarah,7,should
